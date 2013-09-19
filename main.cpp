@@ -68,9 +68,9 @@ void print_pdf(const QString& filename, const QStringList& data, const QString& 
 	html += "<html>";
 	html += "<body>";
 	for (QStringList::const_iterator i = data.begin(); i != data.end(); ++i) {
-		html += *i;
-		html += "<br>";
+		html += "<p>" + *i + "</p>";
 	}
+	html += "<img src=\"icon1.png\">";
 	html += "</body>";
 	html += "</html>";
 
@@ -80,13 +80,20 @@ void print_pdf(const QString& filename, const QStringList& data, const QString& 
 	font.setPointSize(52);
 	td.setDefaultFont(font);
 	*/
-	td.setDefaultStyleSheet(sheet);
-	td.setHtml(html);
 	QPrinter printer;
 	printer.setOutputFormat(QPrinter:: PdfFormat);
 	printer.setOutputFileName(filename);
+	printer.setPageMargins(0.0, 0.0, 0.0, 0.0, QPrinter::Millimeter);
 //	printer.setPaperSize(QPrinter::Custom);
 	printer.setPaperSize(QSizeF(400, 245), QPrinter::Millimeter);
+
+	QSizeF paperSize;
+	paperSize.setWidth(printer.width());
+	paperSize.setHeight(printer.height());
+	td.setDefaultStyleSheet(sheet);
+	td.setDocumentMargin(0.0);
+	td.setHtml(html);
+	td.setPageSize(paperSize);
 	td.print(&printer);
 }
 
@@ -116,7 +123,7 @@ int main(int argc, char* argv[])
 	QTextStream qout(stdout);
 
 
-	QList<QStringList> data = read_xls("C:\\src\\cpp\\stikers\\example.xlsx");
+	QList<QStringList> data = read_xls("C:\\src\\cpp\\stikers\\example1.xlsx");
 
 	QString sheet = read_stylesheet("style.css");
 	for (QList<QStringList>::iterator i = data.begin(); i != data.end(); ++i) {

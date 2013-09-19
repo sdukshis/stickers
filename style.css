@@ -1,3 +1,15 @@
 body {
-	font-size: 200pt;
+	margin: 0px;
+	padding: 0px;
+	font-size: 110pt;
+}
+
+p {
+	margin: 0px;
+	padding: 0px;
+}
+
+img {
+	border: 0px;
+	height: 100px;
 }
