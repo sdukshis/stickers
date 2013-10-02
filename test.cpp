@@ -28,5 +28,11 @@ int main(int argc, char* arg[]) {
         cout << "Paint " << sticker.toString() << " OK" << endl;
     }
 
+    if (cup_painter(sticker)) {
+        cout << "Fail to paint " << sticker.toString() << endl;
+    } else {
+        cout << "Paint " << sticker.toString() << " OK" << endl;
+    }
+
     return 0;
 }

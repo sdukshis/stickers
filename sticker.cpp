@@ -146,5 +146,11 @@ int Sticker::getProtection() const {
 }
 
 string Sticker::toString() const {
-    return this->name;    
+    string article = this->article;
+    for (size_t i = 0; i < article.size(); ++i) {
+        if (article[i] == '/') {
+            article[i] = '_';
+        }
+    }
+    return this->name + " " + article;    
 }
