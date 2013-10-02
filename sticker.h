@@ -3,11 +3,9 @@
 
 #include <string>
 
-using std::string;
-
 class Sticker {
 public:
-    Sticker(const string& name);
+    Sticker(const std::string& name);
     Sticker(const Sticker& S);
 
     ~Sticker();
@@ -17,20 +15,20 @@ public:
     bool operator==(const Sticker& rhs) const;
     bool operator!=(const Sticker& rhs) const;
 
-    void setName(const string& name);
-    const string& getName() const;
-    void setLogo(const string& logo);
-    const string& getLogo() const;
-    void setArticle(const string& article);
-    const string& getArticle() const;
-    void setType(const string& type);
-    const string& getType() const;
+    void setName(const std::string& name);
+    const std::string& getName() const;
+    void setLogo(const std::string& logo);
+    const std::string& getLogo() const;
+    void setArticle(const std::string& article);
+    const std::string& getArticle() const;
+    void setType(const std::string& type);
+    const std::string& getType() const;
     void setNumber(int number);
     int getNumber() const;
-    void setVoltage(const string& voltage);
-    const string& getVoltage() const;
-    void setIP(const string& IP);
-    const string& getIP() const;
+    void setVoltage(const std::string& voltage);
+    const std::string& getVoltage() const;
+    void setIP(const std::string& IP);
+    const std::string& getIP() const;
     void setFlame(int flame);
     int getFlame() const;
     void setLedType(int led_type);
@@ -38,17 +36,21 @@ public:
     void setProtection(int protection);
     int getProtection() const;
 
+    std::string toString() const;
+
 protected:
-    string name;
-    string logo;
-    string article;
-    string type;
+    std::string name;
+    std::string logo;
+    std::string article;
+    std::string type;
     int number;
-    string voltage;
-    string IP;
+    std::string voltage;
+    std::string IP;
     int flame;
     int led_type;
     int protection;
 };
+
+
 
 #endif

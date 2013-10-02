@@ -1,4 +1,8 @@
+#include <string>
+
 #include "sticker.h"
+
+using std::string;
 
 Sticker::Sticker(const string& name) {
     this->name = name;
@@ -139,4 +143,14 @@ void Sticker::setProtection(int protection) {
 
 int Sticker::getProtection() const {
     return this->protection;
+}
+
+string Sticker::toString() const {
+    string article = this->article;
+    for (size_t i = 0; i < article.size(); ++i) {
+        if (article[i] == '/') {
+            article[i] = '_';
+        }
+    }
+    return this->name + " " + article;    
 }
