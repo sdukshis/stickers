@@ -21,20 +21,17 @@ static const std::string LOGO_PATH = "logo/";
 static const std::string ICON_PATH = "icon/";
 
 ObjectIDType getPic(PDFWriter& pdfWriter, const std::string& filepath) {
-    EStatusCode status;
     PDFDocumentCopyingContext* result = 
         pdfWriter.CreatePDFCopyingContext(filepath);
     if (!result) {
         cerr << "Error open file '" << filepath << "'" << endl;
-        status = eFailure;
         return 0;
     }
     EStatusCodeAndObjectIDType resultFirst = result->CreateFormXObjectFromPDFPage(0,ePDFPageBoxMediaBox);
     if(resultFirst.first != eSuccess) {
-        status = eFailure;
         return 0;
     }
-    //ObjectIDTypeList::iterator it = resultFirst.second.begin();
+
     return resultFirst.second;    
 }
 
@@ -123,7 +120,7 @@ int socle_painter(const Sticker& sticker) {
         // Draw Voltage
         contentContext->BT();
         contentContext->Tf(FreeSans,16);
-        contentContext->TD(1, 22);
+        contentContext->TD(1, 25);
         contentContext->Tj(sticker.getVoltage());
         contentContext->ET();
 
