@@ -16,6 +16,7 @@ static const int SOCLE_WIDTH  = 156;
 static const int SOCLE_HEIGHT = 100;
 static const int CUP_WIDTH = 156;
 static const int CUP_HEIGHT = 29;
+static const std::string OUTPUT = "output/";
 static const std::string FONT_PATH = "fonts/";
 static const std::string LOGO_PATH = "logo/";
 static const std::string ICON_PATH = "icon/";
@@ -41,7 +42,7 @@ int socle_painter(const Sticker& sticker) {
     EStatusCode status = eSuccess;
 
     do {
-        status = pdfWriter.StartPDF(sticker.toString() + " Socle.pdf", ePDFVersion15);
+        status = pdfWriter.StartPDF(OUTPUT + sticker.toString() + " Socle.pdf", ePDFVersion15);
         if (status != eSuccess) {
             cerr << "Error startPdf" << endl;
             break;
@@ -160,7 +161,7 @@ int cup_painter(const Sticker& sticker) {
     EStatusCode status = eSuccess;
 
     do {
-        status = pdfWriter.StartPDF(sticker.toString() + " Cup.pdf", ePDFVersion15);
+        status = pdfWriter.StartPDF(OUTPUT + sticker.toString() + " Cup.pdf", ePDFVersion15);
         if (status != eSuccess) {
             cerr << "Error startPdf" << endl;
             break;

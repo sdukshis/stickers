@@ -3,12 +3,15 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = stikers
-INCLUDEPATH += .
-CONFIG += console qaxcontainer
-QT += core printsupport
+TARGET = stickers
+INCLUDEPATH += . hummus\PDFWriter
+LIBPATH += libs
+CONFIG += console 
+QT += core axcontainer
 QT -= gui 
-# LIBS += lqaxcontainer
+LIBS += -lPDFWriter -lLibTiff -lZlib -lLibJpeg -lFreeType
+QMAKE_LFLAGS += -static
 
 # Input
-SOURCES += main.cpp
+SOURCES += main.cpp painter.cpp sticker.cpp
+HEADERS += painter.h sticker.h
