@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 
+
 #include "PDFWriter.h"
 #include "PDFEmbedParameterTypes.h"
 #include "PageContentContext.h"
@@ -11,15 +12,15 @@
 
 using std::cerr;
 using std::endl;
+using std::string;
 
 static const int SOCLE_WIDTH  = 156;
 static const int SOCLE_HEIGHT = 100;
 static const int CUP_WIDTH = 156;
 static const int CUP_HEIGHT = 29;
-static const std::string OUTPUT = "output/";
-static const std::string FONT_PATH = "fonts/";
-static const std::string LOGO_PATH = "logo/";
-static const std::string ICON_PATH = "icon/";
+static const std::string FONT_PATH = "../fonts/";
+static const std::string LOGO_PATH = "../logo/";
+static const std::string ICON_PATH = "../icon/";
 
 ObjectIDType getPic(PDFWriter& pdfWriter, const std::string& filepath) {
     PDFDocumentCopyingContext* result = 
@@ -37,12 +38,12 @@ ObjectIDType getPic(PDFWriter& pdfWriter, const std::string& filepath) {
 }
 
 
-int socle_painter(const Sticker& sticker) {
+int cup_painter(const Sticker& sticker, const string& output) {
     PDFWriter pdfWriter;
     EStatusCode status = eSuccess;
 
     do {
-        status = pdfWriter.StartPDF(OUTPUT + sticker.toString() + " Socle.pdf", ePDFVersion15);
+        status = pdfWriter.StartPDF(output + sticker.toString() + string(" Cup.pdf"), ePDFVersion15);
         if (status != eSuccess) {
             cerr << "Error startPdf" << endl;
             break;
@@ -63,13 +64,19 @@ int socle_painter(const Sticker& sticker) {
             break;
         }
 
-         
+        std::stringstream led_type;
+        led_type << sticker.getLedType() << ".pdf";
+        std::stringstream protection;
+        protection << sticker.getProtection() << ".pdf";
+        std::stringstream flame;
+        flame << sticker.getFlame() << ".pdf";
+
         ObjectIDType Logo = getPic(pdfWriter, LOGO_PATH + sticker.getLogo() + ".pdf");
-        ObjectIDType pic01 = getPic(pdfWriter, ICON_PATH + "01.pdf");
-        ObjectIDType pic19 = getPic(pdfWriter, ICON_PATH + "19.pdf");
-        ObjectIDType pic20 = getPic(pdfWriter, ICON_PATH + "20.pdf");
+        ObjectIDType picFlame = getPic(pdfWriter, ICON_PATH + flame.str());
+        ObjectIDType picType = getPic(pdfWriter, ICON_PATH + led_type.str());
+        ObjectIDType picProtection = getPic(pdfWriter, ICON_PATH + protection.str());
         ObjectIDType RST = getPic(pdfWriter, ICON_PATH + "RST.pdf");
-      
+
         // Draw Logo
         contentContext->q();
         contentContext->cm(1, 0, 0, 1, 1, 75);
@@ -79,34 +86,41 @@ int socle_painter(const Sticker& sticker) {
 
         // Draw icons
         contentContext->q();
-        contentContext->cm(0.1, 0, 0, 0.1, 46, 2);
+        contentContext->cm(0.1, 0, 0, 0.1, 35, 2);
         contentContext->Do(
-           page->GetResourcesDictionary().AddFormXObjectMapping(pic01));
+           page->GetResourcesDictionary().AddFormXObjectMapping(picFlame));
         contentContext->Q();
 
         contentContext->q();
-        contentContext->cm(0.1, 0, 0, 0.1, 70, 2);
+        contentContext->cm(0.1, 0, 0, 0.1, 61, 2);
         contentContext->Do(
-           page->GetResourcesDictionary().AddFormXObjectMapping(pic19));
+           page->GetResourcesDictionary().AddFormXObjectMapping(picProtection));
         contentContext->Q();
 
         contentContext->q();
-        contentContext->cm(0.1, 0, 0, 0.1, 96, 2);
+        contentContext->cm(0.1, 0, 0, 0.1, 87, 2);
         contentContext->Do(
-           page->GetResourcesDictionary().AddFormXObjectMapping(pic20));
+           page->GetResourcesDictionary().AddFormXObjectMapping(picType));
         contentContext->Q();
 
         contentContext->q();
-        contentContext->cm(0.1, 0, 0, 0.1, 122, 2);
+        contentContext->cm(0.1, 0, 0, 0.1, 113, 2);
         contentContext->Do(
            page->GetResourcesDictionary().AddFormXObjectMapping(RST));
         contentContext->Q();
 
         // Draw Article
         contentContext->BT();
-        contentContext->Tf(FreeSans,16);
+        contentContext->Tf(FreeSans, 16);
         contentContext->TD(1, 62);
-        contentContext->Tj("Арт:" + sticker.getArticle());
+        contentContext->Tj("Арт:");
+        contentContext->ET();
+
+        contentContext->BT();
+        contentContext->Tf(FreeSans, 14);
+        contentContext->TD(35, 62);
+        contentContext->Tz(70);
+        contentContext->Tj(sticker.getArticle());
         contentContext->ET();
 
         // Draw Type
@@ -156,12 +170,12 @@ int socle_painter(const Sticker& sticker) {
     return status != eSuccess;
 }
 
-int cup_painter(const Sticker& sticker) {
+int socle_painter(const Sticker& sticker, const string& output) {
     PDFWriter pdfWriter;
     EStatusCode status = eSuccess;
 
     do {
-        status = pdfWriter.StartPDF(OUTPUT + sticker.toString() + " Cup.pdf", ePDFVersion15);
+        status = pdfWriter.StartPDF(output + sticker.toString() + std::string(" Socle.pdf"), ePDFVersion15);
         if (status != eSuccess) {
             cerr << "Error startPdf" << endl;
             break;
@@ -189,7 +203,7 @@ int cup_painter(const Sticker& sticker) {
         type << sticker.getType() << "x" << sticker.getNumber();
         type << " " << sticker.getVoltage();
         contentContext->BT();
-        contentContext->Tf(FreeSans,11.8);
+        contentContext->Tf(FreeSans, 11);
         contentContext->TD(0, 10);
         contentContext->Tj(type.str());
         contentContext->ET();

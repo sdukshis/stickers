@@ -1,6 +1,7 @@
 #include <string>
 
 #include <QApplication>
+#include <QDir>
 
 #include "StickerWidget.h"
 
@@ -61,7 +62,7 @@ void StickerWidget::chooseInput()
     if (newInputFileName != "") {
         inputFileName = newInputFileName;
         this->inputFileLine->setText(inputFileName);
-        this->printMessage(QString(tr("You choose")) + inputFileName + QString(" as input file"));
+        this->printMessage(QString(tr("You choose ")) + inputFileName + QString(" as input file"));
     }
 }
 
@@ -74,7 +75,7 @@ void StickerWidget::chooseOutput()
     if (newOutputDirName != "") {
         outputDirName = newOutputDirName;
         this->outputDirLine->setText(outputDirName);
-        this->printMessage(QString(tr("You choose")) + outputDirName + QString(" as output dir"));
+        this->printMessage(QString(tr("You choose ")) + outputDirName + QString(" as output dir"));
     }
 }
 
@@ -175,18 +176,21 @@ QList<Sticker> StickerWidget::createStickers(const QList<QStringList>& table)
 int StickerWidget::paintAllSticker(const QList<Sticker>& stickers)
 {
     std::string output =  outputDirName.toStdString() + "/";
+    QString prev_dir = QDir::currentPath();
+    QDir::setCurrent(outputDirName + "/");
     for (QList<Sticker>::const_iterator i = stickers.begin(); i != stickers.end(); ++i) {
-        if (socle_painter(*i, output)) {
+        if (socle_painter(*i, "")) {
             printMessage(QString("Fail to paint ") + QString(i->toString().c_str()) + QString( "Socle.pdf"));
         } else {
             printMessage(QString("Paint ") + QString(i->toString().c_str()) + QString( "Socle.pdf OK"));
         }
-        if (cup_painter(*i, output)) {
+        if (cup_painter(*i, "")) {
             printMessage(QString("Fail to paint ") + QString(i->toString().c_str()) + QString( "Cup.pdf"));
         } else {
             printMessage(QString("Paint ") + QString(i->toString().c_str()) + QString( "Cup.pdf OK"));
         }           
     }
+    QDir::setCurrent(prev_dir);
     return 0;
 }
 

@@ -6,12 +6,10 @@ TEMPLATE = app
 TARGET = stickers
 INCLUDEPATH += . hummus\PDFWriter
 LIBPATH += libs
-CONFIG += console 
-QT += core axcontainer
-QT -= gui 
+QT += gui core axcontainer
 LIBS += -lPDFWriter -lLibTiff -lZlib -lLibJpeg -lFreeType
 QMAKE_LFLAGS += -static
 
 # Input
-SOURCES += main.cpp painter.cpp sticker.cpp
-HEADERS += painter.h sticker.h
+SOURCES += main.cpp painter.cpp sticker.cpp stickerWidget.cpp
+HEADERS += painter.h sticker.h stickerWidget.h
